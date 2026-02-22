@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import cz.osu.swidemo.repositories.UserRepository;
 
+// Add UUID for unique usernames.
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/test")
 public class TestController {
@@ -18,7 +21,7 @@ public class TestController {
     @GetMapping
     public String test() {
         User user = new User();
-        user.setUsername("testuser");
+        user.setUsername("testuser-" + UUID.randomUUID());
         user.setPassword("password123");
         user.setAge(25);
         user.setEmail("test@example.com");
