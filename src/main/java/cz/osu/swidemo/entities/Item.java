@@ -2,6 +2,7 @@ package cz.osu.swidemo.entities;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ public class Item {
     @Column(name = "item_name", nullable = false, length = 200)
     private String itemName;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "items")
     private List<Order> orders = new ArrayList<>();
 

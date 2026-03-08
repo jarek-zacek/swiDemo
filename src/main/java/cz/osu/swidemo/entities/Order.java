@@ -2,6 +2,7 @@ package cz.osu.swidemo.entities;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class Order {
     @Column(name = "order_id", columnDefinition = "VARCHAR(36)")
     private String orderId;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
