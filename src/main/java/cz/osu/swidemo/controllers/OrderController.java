@@ -1,5 +1,6 @@
 package cz.osu.swidemo.controllers;
 
+import cz.osu.swidemo.dto.ItemDTO;
 import cz.osu.swidemo.entities.Item;
 import cz.osu.swidemo.entities.Order;
 import cz.osu.swidemo.entities.User;
@@ -70,6 +71,27 @@ public class OrderController {
         }
     }
 
+    @PostMapping("/items")
+    public ResponseEntity<?> getItemsByOrderId(@RequestBody OrderItemsRequest request) {
+        if (request == null || request.getOrderId() == null || request.getOrderId().trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("orderId is required");
+        }
+
+        Optional<Order> orderOptional = orderRepository.findById(request.getOrderId());
+        if (!orderOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Order not found with ID: " + request.getOrderId());
+        }
+
+        List<ItemDTO> itemDTOs = new ArrayList<>();
+        for (Item item : orderOptional.get().getItems()) {
+            itemDTOs.add(new ItemDTO(item.getItemId(), item.getItemName()));
+        }
+
+        return ResponseEntity.ok(itemDTOs);
+    }
+
     // Inner class for request body
     public static class OrderRequest {
         private String userId;
@@ -112,5 +134,19 @@ public class OrderController {
             this.itemIds = itemIds;
         }
     }
-}
 
+    public static class OrderItemsRequest {
+        private String orderId;
+
+        public OrderItemsRequest() {
+        }
+
+        public String getOrderId() {
+            return orderId;
+        }
+
+        public void setOrderId(String orderId) {
+            this.orderId = orderId;
+        }
+    }
+}
